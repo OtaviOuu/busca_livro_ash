@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :ex_cldr, default_backend: BuscaLivro.Cldr
+
 config :ash,
   allow_forbidden_field_for_relationships_by_default?: true,
   include_embedded_source_by_default?: false,
@@ -18,7 +20,8 @@ config :ash,
   read_action_after_action_hooks_in_order?: true,
   bulk_actions_default_to_errors?: true,
   transaction_rollback_on_error?: true,
-  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec]
+  known_types: [AshPostgres.Timestamptz, AshPostgres.TimestamptzUsec, AshMoney.Types.Money],
+  custom_types: [money: AshMoney.Types.Money]
 
 config :spark,
   formatter: [
@@ -54,7 +57,7 @@ config :spark,
 config :busca_livro,
   ecto_repos: [BuscaLivro.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [BuscaLivro.Accounts],
+  ash_domains: [BuscaLivro.Founds, BuscaLivro.Accounts],
   ash_authentication: [return_error_on_invalid_magic_link_token?: true]
 
 # Configure the endpoint
