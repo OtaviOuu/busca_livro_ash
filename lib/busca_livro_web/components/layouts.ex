@@ -35,38 +35,83 @@ defmodule BuscaLivroWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
-            <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
+    <div class="h-screen">
+      <header class="fixed inset-y-0 left-0 z-50 w-16 border-e border-gray-100 bg-white flex flex-col justify-between">
+        <div>
+          <div class="inline-flex size-16 items-center justify-center">
+            <span class="grid size-10 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
+              L
+            </span>
+          </div>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
-        {render_slot(@inner_block)}
-      </div>
-    </main>
+          <div class="border-t border-gray-100">
+            <div class="px-2">
+              <div class="py-4">
+                <a
+                  href="#"
+                  class="group relative flex justify-center rounded-sm bg-blue-50 px-2 py-1.5 text-blue-700"
+                >
+                  <.icon name="hero-cog-6-tooth" class="size-5" />
+                </a>
+              </div>
+
+              <ul class="space-y-1 border-t border-gray-100 pt-4">
+                <li>
+                  <a
+                    href="#"
+                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <.icon name="hero-users" class="size-5 opacity-75" />
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="#"
+                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <.icon name="hero-folder" class="size-5 opacity-75" />
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="#"
+                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <.icon name="hero-document-text" class="size-5 opacity-75" />
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    href="#"
+                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  >
+                    <.icon name="hero-user-circle" class="size-5 opacity-75" />
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-2">
+          <a
+            href="#"
+            class="group relative flex w-full justify-center rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+          >
+            <.icon name="hero-arrow-uturn-left" class="size-5 opacity-75" />
+          </a>
+        </div>
+      </header>
+
+      <main class="ml-16 h-screen overflow-y-auto px-4 py-20 sm:px-6 lg:px-8">
+        <div class="mx-auto space-y-4">
+          {render_slot(@inner_block)}
+        </div>
+      </main>
+    </div>
 
     <.flash_group flash={@flash} />
     """

@@ -42,6 +42,7 @@ defmodule BuscaLivroWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/home", HomeLive, :index
     auth_routes AuthController, BuscaLivro.Accounts.User, path: "/auth"
     sign_out_route AuthController
 
