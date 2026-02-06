@@ -10,7 +10,9 @@ defmodule BuscaLivro.Founds do
   resources do
     resource BuscaLivro.Founds.Book do
       define :create_book, action: :create
+      define :list_books, action: :read
     end
+
     resource BuscaLivro.Founds.Plataform
   end
 end

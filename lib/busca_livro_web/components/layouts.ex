@@ -36,7 +36,7 @@ defmodule BuscaLivroWeb.Layouts do
   def app(assigns) do
     ~H"""
     <div class="h-screen">
-      <header class="fixed inset-y-0 left-0 z-50 w-16 border-e border-gray-100 bg-white flex flex-col justify-between">
+      <header class="fixed inset-y-0 left-0 z-50 w-16  bg-white flex flex-col justify-between">
         <div>
           <div class="inline-flex size-16 items-center justify-center">
             <span class="grid size-10 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">

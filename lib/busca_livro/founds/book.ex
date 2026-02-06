@@ -10,9 +10,19 @@ defmodule BuscaLivro.Founds.Book do
   end
 
   actions do
-    defaults [:read, :destroy, :create]
+    defaults [:destroy, :create]
 
     default_accept [:title, :price, :image_url, :url]
+
+    read :read do
+      primary? true
+
+      pagination do
+        required? true
+        default_limit 10
+        offset? true
+      end
+    end
   end
 
   attributes do
