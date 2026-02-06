@@ -15,5 +15,6 @@ defmodule BuscaLivro.Founds do
     end
 
     resource BuscaLivro.Founds.Plataform
+    resource BuscaLivro.Founds.BookUser
   end
 end

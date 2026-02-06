@@ -1,6 +1,8 @@
 defmodule BuscaLivroWeb.HomeLive do
   use BuscaLivroWeb, :live_view
 
+  on_mount {BuscaLivroWeb.LiveUserAuth, :live_user_optional}
+
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
@@ -28,6 +30,7 @@ defmodule BuscaLivroWeb.HomeLive do
                 </span>
 
                 <input
+                  phx-debounce="100"
                   type="search"
                   placeholder="Buscar livros..."
                   name="search_form[book_name]"

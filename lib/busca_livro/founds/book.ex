@@ -57,6 +57,11 @@ defmodule BuscaLivro.Founds.Book do
   end
 
   relationships do
+    many_to_many :users, BuscaLivro.Accounts.User do
+      through BuscaLivro.Founds.BookUser
+      source_attribute_on_join_resource :book_id
+      destination_attribute_on_join_resource :user_id
+    end
   end
 
   identities do

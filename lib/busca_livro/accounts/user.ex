@@ -289,6 +289,14 @@ defmodule BuscaLivro.Accounts.User do
     attribute :confirmed_at, :utc_datetime_usec
   end
 
+  relationships do
+    many_to_many :books, BuscaLivro.Founds.Book do
+      through BuscaLivro.Founds.BookUser
+      source_attribute_on_join_resource :user_id
+      destination_attribute_on_join_resource :book_id
+    end
+  end
+
   identities do
     identity :unique_email, [:email]
   end
