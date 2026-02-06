@@ -16,14 +16,22 @@ defmodule BuscaLivro.Founds.Book do
       allow_nil? false
     end
 
-    attribute :description, :string do
-      allow_nil? false
-    end
-
     attribute :price, :money do
       allow_nil? false
     end
 
+    attribute :image_url, :string do
+      allow_nil? false
+    end
+
     timestamps()
+  end
+
+  relationships do
+    belongs_to :platform, BuscaLivro.Founds.Plataform do
+      source_attribute :platform_id
+      destination_attribute :id
+      allow_nil? false
+    end
   end
 end

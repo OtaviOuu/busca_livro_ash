@@ -11,6 +11,11 @@ defmodule BuscaLivro.Application do
       BuscaLivroWeb.Telemetry,
       BuscaLivro.Repo,
       {DNSCluster, query: Application.get_env(:busca_livro, :dns_cluster_query) || :ignore},
+      {Oban,
+       AshOban.config(
+         Application.fetch_env!(:busca_livro, :ash_domains),
+         Application.fetch_env!(:busca_livro, Oban)
+       )},
       {Phoenix.PubSub, name: BuscaLivro.PubSub},
       # Start a worker by calling: BuscaLivro.Worker.start_link(arg)
       # {BuscaLivro.Worker, arg},

@@ -9,5 +9,6 @@ defmodule BuscaLivro.Founds do
 
   resources do
     resource BuscaLivro.Founds.Book
+    resource BuscaLivro.Founds.Plataform
   end
 end

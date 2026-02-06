@@ -1,6 +1,7 @@
 defmodule BuscaLivroWeb.Router do
   use BuscaLivroWeb, :router
 
+  import Oban.Web.Router
   use AshAuthentication.Phoenix.Router
 
   import AshAuthentication.Plug.Helpers
@@ -94,6 +95,12 @@ defmodule BuscaLivroWeb.Router do
 
       live_dashboard "/dashboard", metrics: BuscaLivroWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+
+    scope "/" do
+      pipe_through :browser
+
+      oban_dashboard("/oban")
     end
   end
 
