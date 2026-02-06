@@ -35,12 +35,16 @@ defmodule BuscaLivroWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <div class="h-screen">
+    <div class="h-screen bg-gray-50">
       <header class="fixed inset-y-0 left-0 z-50 w-16  bg-white flex flex-col justify-between">
         <div>
-          <div class="inline-flex size-16 items-center justify-center">
+          <div
+            :if={@current_user}
+            phx-click={JS.navigate(~p"/profile")}
+            class="inline-flex size-16 items-center justify-center cursor-pointer"
+          >
             <span class="grid size-10 place-content-center rounded-lg bg-gray-100 text-xs text-gray-600">
-              L
+              {@current_user.email}
             </span>
           </div>
 
