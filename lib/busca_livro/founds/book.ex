@@ -9,6 +9,12 @@ defmodule BuscaLivro.Founds.Book do
     repo BuscaLivro.Repo
   end
 
+  actions do
+    defaults [:read, :destroy, :create]
+
+    default_accept [:title, :price, :image_url, :url]
+  end
+
   attributes do
     uuid_v7_primary_key :id
 
@@ -24,14 +30,17 @@ defmodule BuscaLivro.Founds.Book do
       allow_nil? false
     end
 
+    attribute :url, :string do
+      allow_nil? false
+    end
+
     timestamps()
   end
 
   relationships do
-    belongs_to :platform, BuscaLivro.Founds.Plataform do
-      source_attribute :platform_id
-      destination_attribute :id
-      allow_nil? false
-    end
+  end
+
+  identities do
+    identity :unique_url, [:url]
   end
 end

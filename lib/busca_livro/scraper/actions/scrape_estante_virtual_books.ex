@@ -71,6 +71,7 @@ defmodule BuscaLivro.Scraper.Actions.ScrapeEstanteVirtualBooks do
       put_title_data(book_html_tree)
       |> put_price_data(book_html_tree)
       |> put_image_url_data(book_html_tree)
+      |> Map.put(:url, book_url)
     end
   end
 
@@ -90,6 +91,9 @@ defmodule BuscaLivro.Scraper.Actions.ScrapeEstanteVirtualBooks do
       |> Floki.find(".book-copy__price__sale-price")
       |> Floki.text()
       |> String.trim()
+      |> String.split("R$")
+      |> List.last()
+      |> String.replace(",", ".")
 
     Map.put(book_data, :price, price_stirng)
   end

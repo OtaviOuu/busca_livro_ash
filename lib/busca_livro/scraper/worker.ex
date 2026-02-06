@@ -3,7 +3,15 @@ defmodule BuscaLivro.Scraper.Worker do
 
   def perform(_job) do
     case BuscaLivro.Scraper.scrape_estante_virtual_books() do
-      {:ok, result} ->
+      {:ok, books_attrs} ->
+        dbg(
+          Ash.bulk_create(books_attrs, BuscaLivro.Founds.Book, :create,
+            upsert?: true,
+            upsert_identity: :unique_url,
+            upsert_fields: [:title, :authors, :price, :cover_url]
+          )
+        )
+
         :ok
 
       {:error, reason} ->
