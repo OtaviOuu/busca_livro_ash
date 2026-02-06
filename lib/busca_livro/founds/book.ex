@@ -17,7 +17,20 @@ defmodule BuscaLivro.Founds.Book do
     read :read do
       primary? true
 
-      pagination offset?: true, keyset?: true, required?: true
+      pagination offset?: true, keyset?: true, required?: false
+    end
+
+    read :search do
+      argument :book_name, :string do
+        allow_nil? false
+      end
+
+      filter expr(
+               ilike(title, "%" <> ^arg(:book_name) <> "%") or
+                 ilike(url, "%" <> ^arg(:book_name) <> "%")
+             )
+
+      pagination offset?: true, keyset?: true, required?: false
     end
   end
 
