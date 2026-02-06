@@ -2,9 +2,17 @@ defmodule BuscaLivroWeb.HomeLive do
   use BuscaLivroWeb, :live_view
 
   def mount(_params, _session, socket) do
-    {:ok, %{results: books}} = BuscaLivro.Founds.list_books()
+    socket =
+      socket
+      |> assign_async(:books, fn ->
+        books =
+          BuscaLivro.Founds.list_books!(page: [limit: 10, offset: 0])
+          |> Map.get(:results)
 
-    {:ok, assign(socket, books: books)}
+        {:ok, %{books: books}}
+      end)
+
+    {:ok, socket}
   end
 
   def render(assigns) do
@@ -25,9 +33,16 @@ defmodule BuscaLivroWeb.HomeLive do
             </label>
           </div>
 
-          <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <.book_card :for={book <- @books} book={book} />
-          </ul>
+          <.async_result :let={books} assign={@books}>
+            <:loading>
+              <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <.books_card_skeleton :for={_ <- 1..6} />
+              </ul>
+            </:loading>
+            <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <.book_card :for={book <- books} book={book} />
+            </ul>
+          </.async_result>
         </div>
         <div class="h-32 rounded bg-gray-300">
           tchau
@@ -37,9 +52,25 @@ defmodule BuscaLivroWeb.HomeLive do
     """
   end
 
+  defp books_card_skeleton(assigns) do
+    ~H"""
+    <div class="card cursor-pointer border border-dotted bg-base-200 w-96 shadow-xl">
+      <figure class="px-4 pt-4">
+        <div class="skeleton h-72 w-full rounded-xl"></div>
+      </figure>
+
+      <div class="card-body gap-4 flex-1 min-h-[250px]">
+        <div class="skeleton h-7 w-4/5"></div>
+        <div class="skeleton h-6 w-2/5"></div>
+        <div class="skeleton h-6 w-3/5"></div>
+      </div>
+    </div>
+    """
+  end
+
   defp book_card(assigns) do
     ~H"""
-    <div class="card bg-base-200 w-96 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div class="card cursor-pointer border border-dotted bg-base-200 w-96 shadow-xl hover:shadow-2xl transition-shadow duration-300">
       <div class="card-body">
         <h2 class="card-title">{@book.title}</h2>
         <p>

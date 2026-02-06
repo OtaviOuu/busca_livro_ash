@@ -17,11 +17,7 @@ defmodule BuscaLivro.Founds.Book do
     read :read do
       primary? true
 
-      pagination do
-        required? true
-        default_limit 10
-        offset? true
-      end
+      pagination offset?: true, keyset?: true, required?: true
     end
   end
 
