@@ -1,4 +1,5 @@
 import Config
+config :busca_livro, Oban, testing: :manual
 config :busca_livro, token_signing_secret: "GTv8Ip+f2kIvLSCO1FhS9SwLe1qbm9wu"
 config :bcrypt_elixir, log_rounds: 1
 config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true

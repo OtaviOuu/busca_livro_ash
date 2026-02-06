@@ -7,6 +7,22 @@
 # General application configuration
 import Config
 
+config :ash_oban, pro?: false
+
+config :busca_livro, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  queues: [default: 10],
+  repo: BuscaLivro.Repo,
+  plugins: [
+    {Oban.Plugins.Cron,
+     [
+       crontab: [
+         {"* * * * *", BuscaLivro.Scraper.Worker}
+       ]
+     ]}
+  ]
+
 config :ex_cldr, default_backend: BuscaLivro.Cldr
 
 config :ash,
@@ -57,7 +73,7 @@ config :spark,
 config :busca_livro,
   ecto_repos: [BuscaLivro.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [BuscaLivro.Founds, BuscaLivro.Accounts],
+  ash_domains: [BuscaLivro.Scraper, BuscaLivro.Founds, BuscaLivro.Accounts],
   ash_authentication: [return_error_on_invalid_magic_link_token?: true]
 
 # Configure the endpoint

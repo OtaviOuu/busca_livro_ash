@@ -1,0 +1,6 @@
+categorias
+urls
+
+
+
+https://www.estantevirtual.com.br/comunicacao?sort=new-releases&tipo-de-livro=usado

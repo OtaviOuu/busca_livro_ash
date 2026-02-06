@@ -41,6 +41,8 @@ defmodule BuscaLivro.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:oban, "~> 2.0"},
+      {:ash_oban, "~> 0.7"},
       {:ex_money_sql, "~> 1.0"},
       {:ex_cldr, "~> 2.0"},
       {:ash_money, "~> 0.2"},
@@ -79,7 +81,9 @@ defmodule BuscaLivro.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:oban_web, "~> 2.11"},
+      {:floki, "~> 0.38.0"}
     ]
   end
 
