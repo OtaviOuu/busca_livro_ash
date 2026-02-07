@@ -1,4 +1,6 @@
 defmodule BuscaLivro.Accounts.User do
+  require Ash.Resource.Change.Builtins
+
   use Ash.Resource,
     otp_app: :busca_livro,
     domain: BuscaLivro.Accounts,
@@ -62,7 +64,29 @@ defmodule BuscaLivro.Accounts.User do
   end
 
   actions do
-    defaults [:read]
+    read :read do
+      primary? true
+    end
+
+    update :add_wanted_word do
+      accept [:wanted_words]
+      require_atomic? false
+
+      argument :new_word, :string do
+        description "A new word to add to the user's wanted words list."
+        allow_nil? false
+      end
+
+      change fn changeset, _ctx ->
+        new_word = Ash.Changeset.get_argument(changeset, :new_word)
+        old_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
+
+        newest_words = Enum.uniq([new_word | old_words])
+
+        changeset
+        |> Ash.Changeset.change_attribute(:wanted_words, newest_words)
+      end
+    end
 
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
@@ -272,6 +296,10 @@ defmodule BuscaLivro.Accounts.User do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
       authorize_if always()
     end
+
+    policy action_type(:read) do
+      authorize_if actor_present()
+    end
   end
 
   attributes do
@@ -287,6 +315,15 @@ defmodule BuscaLivro.Accounts.User do
     end
 
     attribute :confirmed_at, :utc_datetime_usec
+
+    attribute :wanted_words, {:array, :string} do
+      default []
+
+      description "A list of words that the user wants to be notified about when they appear in book titles"
+
+      allow_nil? false
+      public? true
+    end
   end
 
   relationships do

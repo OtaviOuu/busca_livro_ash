@@ -1,7 +1,8 @@
 defmodule BuscaLivro.Scraper.EstanteVirtual do
   use Ash.Resource,
     otp_app: :busca_livro,
-    domain: BuscaLivro.Scraper
+    domain: BuscaLivro.Scraper,
+    extensions: [AshOban]
 
   actions do
     action :scrape, {:array, :map} do

@@ -7,6 +7,10 @@ defmodule BuscaLivro.Accounts do
 
   resources do
     resource BuscaLivro.Accounts.Token
-    resource BuscaLivro.Accounts.User
+
+    resource BuscaLivro.Accounts.User do
+      define :add_wanted_word, action: :add_wanted_word, args: [:new_word]
+      define :list_users, action: :read
+    end
   end
 end

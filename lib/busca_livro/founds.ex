@@ -18,6 +18,7 @@ defmodule BuscaLivro.Founds do
 
     resource BuscaLivro.Founds.BookUser do
       define :list_achados, action: :read
+      define :associate_wanted_book_to_user, action: :create, args: [:book_id, :user_id]
     end
   end
 end

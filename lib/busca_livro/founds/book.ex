@@ -10,9 +10,28 @@ defmodule BuscaLivro.Founds.Book do
   end
 
   actions do
-    defaults [:destroy, :create]
+    defaults [:destroy]
 
     default_accept [:title, :price, :image_url, :url]
+
+    create :create do
+      primary? true
+
+      change after_action(fn changeset, book, _ctx ->
+               book = Ash.load!(book, :title_words)
+               users = BuscaLivro.Accounts.list_users!(authorize?: false)
+
+               Enum.each(users, fn user ->
+                 if Enum.any?(user.wanted_words, &(&1 in book.title_words)) do
+                   BuscaLivro.Founds.associate_wanted_book_to_user!(book.id, user.id,
+                     authorize?: false
+                   )
+                 end
+               end)
+
+               {:ok, book}
+             end)
+    end
 
     read :read do
       primary? true
@@ -62,6 +81,12 @@ defmodule BuscaLivro.Founds.Book do
       source_attribute_on_join_resource :book_id
       destination_attribute_on_join_resource :user_id
     end
+  end
+
+  calculations do
+    calculate :title_words,
+              {:array, :string},
+              expr(fragment("regexp_split_to_array(lower(?), '\\s+')", title))
   end
 
   identities do
