@@ -13,10 +13,13 @@ defmodule BuscaLivroWeb.HomeLive do
 
     socket =
       socket
+      |> assign(:current_user, socket.assigns.current_user)
       |> assingn_books(query)
-      |> assign_found_books()
 
-    {:noreply, socket}
+    case socket.assigns.current_user do
+      nil -> {:noreply, socket}
+      _ -> {:noreply, assign_found_books(socket)}
+    end
   end
 
   def render(assigns) do
@@ -77,7 +80,7 @@ defmodule BuscaLivroWeb.HomeLive do
               {word}
             </p>
           </div>
-          <.async_result :let={books_founds} assign={@books_founds}>
+          <.async_result :let={books_founds} :if={@current_user} assign={@books_founds}>
             <:loading>
               <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <.books_card_skeleton :for={_ <- 1..6} />
@@ -218,7 +221,7 @@ defmodule BuscaLivroWeb.HomeLive do
       "" ->
         assign_async(socket, :books, fn ->
           books =
-            BuscaLivro.Founds.list_books!(page: [limit: 10, offset: 0])
+            BuscaLivro.Founds.list_books!(page: [limit: 100, offset: 0])
             |> Map.get(:results, [])
 
           {:ok, %{books: books}}

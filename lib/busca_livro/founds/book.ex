@@ -10,7 +10,7 @@ defmodule BuscaLivro.Founds.Book do
   end
 
   actions do
-    defaults [:destroy]
+    defaults [:destroy, :update]
 
     default_accept [:title, :price, :image_url, :url]
 

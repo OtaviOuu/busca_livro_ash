@@ -12,9 +12,9 @@ defmodule BuscaLivro.Scraper.Actions.ScrapeEstanteVirtualBooks do
   def run(_input, _opts, _ctx) do
     books_url =
       get_categories_urls()
-      |> Enum.take(5)
+      # |> Enum.take(5)
       |> get_all_books_urls_from_categories_urls()
-      |> Enum.take(10)
+      # |> Enum.take(10)
       |> get_all_books_data_from_urls()
 
     {:ok, books_url}
