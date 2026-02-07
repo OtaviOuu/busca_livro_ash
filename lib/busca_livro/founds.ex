@@ -15,6 +15,9 @@ defmodule BuscaLivro.Founds do
     end
 
     resource BuscaLivro.Founds.Plataform
-    resource BuscaLivro.Founds.BookUser
+
+    resource BuscaLivro.Founds.BookUser do
+      define :list_achados, action: :read
+    end
   end
 end

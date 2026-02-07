@@ -14,6 +14,7 @@ defmodule BuscaLivroWeb.HomeLive do
     socket =
       socket
       |> assingn_books(query)
+      |> assign_found_books()
 
     {:noreply, socket}
   end
@@ -71,14 +72,14 @@ defmodule BuscaLivroWeb.HomeLive do
               Seus livros encontrados
             </:subtitle>
           </.header>
-          <.async_result :let={books} assign={@books}>
+          <.async_result :let={books_founds} assign={@books_founds}>
             <:loading>
               <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <.books_card_skeleton :for={_ <- 1..6} />
               </ul>
             </:loading>
             <ul class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
-              <.found_book_card :for={book <- books} book={book} />
+              <.found_book_card :for={book_found <- books_founds} book_found={book_found} />
             </ul>
           </.async_result>
         </div>
@@ -107,17 +108,17 @@ defmodule BuscaLivroWeb.HomeLive do
     ~H"""
     <div class="card cursor-pointer border border-dotted bg-base-200 w-vh shadow-xl hover:shadow-2xl transition-shadow duration-300">
       <div class="card-body">
-        <h2 class="card-title">{@book.title}</h2>
+        <h2 class="card-title">{@book_found.book.title}</h2>
         <p>
-          {@book.price}
+          {@book_found.book.price}
         </p>
         <p>
-          {@book.inserted_at}
+          {@book_found.book.inserted_at}
         </p>
       </div>
       <figure>
         <img
-          src={@book.image_url}
+          src={@book_found.book.image_url}
           alt="Shoes"
         />
       </figure>
@@ -227,5 +228,17 @@ defmodule BuscaLivroWeb.HomeLive do
           {:ok, %{books: books}}
         end)
     end
+  end
+
+  def assign_found_books(socket) do
+    current_user = socket.assigns.current_user
+
+    assign_async(socket, :books_founds, fn ->
+      books_founds =
+        BuscaLivro.Founds.list_achados!(actor: current_user, page: [limit: 10, offset: 0])
+        |> Map.get(:results, [])
+
+      {:ok, %{books_founds: books_founds}}
+    end)
   end
 end
