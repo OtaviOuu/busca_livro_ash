@@ -4,3 +4,9 @@ urls
 
 
 https://www.estantevirtual.com.br/comunicacao?sort=new-releases&tipo-de-livro=usado
+
+
+
+livro criado
+users com "busca" desse livro
+adiciona "found_book" no user

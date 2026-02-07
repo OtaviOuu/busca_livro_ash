@@ -44,6 +44,7 @@ defmodule BuscaLivroWeb.Router do
 
     get "/", PageController, :home
     live "/home", HomeLive, :index
+    live "/profile", ProfileLive, :index
     auth_routes AuthController, BuscaLivro.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

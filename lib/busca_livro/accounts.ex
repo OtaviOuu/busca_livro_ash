@@ -1,5 +1,5 @@
 defmodule BuscaLivro.Accounts do
-  use Ash.Domain, otp_app: :busca_livro, extensions: [AshAdmin.Domain]
+  use Ash.Domain, otp_app: :busca_livro, extensions: [AshAdmin.Domain, AshPhoenix]
 
   admin do
     show? true

@@ -72,6 +72,11 @@ defmodule BuscaLivroWeb.HomeLive do
               Seus livros encontrados
             </:subtitle>
           </.header>
+          <div :if={@current_user} class="flex flex-row gap-2 mb-4">
+            <p :for={word <- @current_user.wanted_words} class="badge badge-primary badge-outline">
+              {word}
+            </p>
+          </div>
           <.async_result :let={books_founds} assign={@books_founds}>
             <:loading>
               <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
