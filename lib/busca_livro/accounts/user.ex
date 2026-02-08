@@ -80,11 +80,25 @@ defmodule BuscaLivro.Accounts.User do
       change fn changeset, _ctx ->
         new_word = Ash.Changeset.get_argument(changeset, :new_word)
         old_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
-
         newest_words = Enum.uniq([new_word | old_words])
 
         changeset
         |> Ash.Changeset.change_attribute(:wanted_words, newest_words)
+      end
+
+      validate fn changeset, _context ->
+        wanted_word = Ash.Changeset.get_argument(changeset, :new_word)
+
+        if wanted_word && String.contains?(wanted_word, " ") do
+          {:error,
+           Ash.Changeset.add_error(
+             changeset,
+             field: :new_word,
+             message: "must be a single word without spaces"
+           )}
+        else
+          :ok
+        end
       end
     end
 
