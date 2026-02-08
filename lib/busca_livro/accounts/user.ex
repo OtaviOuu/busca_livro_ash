@@ -100,6 +100,26 @@ defmodule BuscaLivro.Accounts.User do
           :ok
         end
       end
+
+      validate fn changeset, _context ->
+        max_words = 5
+
+        new_wanted_word = Ash.Changeset.get_argument(changeset, :new_word)
+        actual_wanted_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
+
+        words = [new_wanted_word | actual_wanted_words]
+
+        if length(words) > max_words do
+          {:error,
+           Ash.Changeset.add_error(
+             changeset,
+             field: :new_word,
+             message: "cannot have more than 5 wanted words"
+           )}
+        else
+          :ok
+        end
+      end
     end
 
     read :get_by_subject do
