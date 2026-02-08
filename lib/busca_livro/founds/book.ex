@@ -14,6 +14,12 @@ defmodule BuscaLivro.Founds.Book do
 
     default_accept [:title, :price, :image_url, :url]
 
+    action :count, :integer do
+      run fn changeset, _context ->
+        Ash.count(__MODULE__)
+      end
+    end
+
     create :create do
       primary? true
 

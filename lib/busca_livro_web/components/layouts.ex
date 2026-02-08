@@ -53,7 +53,7 @@ defmodule BuscaLivroWeb.Layouts do
               <div class="py-4">
                 <a
                   href="#"
-                  class="group relative flex justify-center rounded-sm bg-blue-50 px-2 py-1.5 text-blue-700"
+                  class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                 >
                   <.icon name="hero-cog-6-tooth" class="size-5" />
                 </a>
@@ -61,39 +61,21 @@ defmodule BuscaLivroWeb.Layouts do
 
               <ul class="space-y-1 border-t border-gray-100 pt-4">
                 <li>
-                  <a
-                    href="#"
-                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                  <.link
+                    navigate={~p"/home"}
+                    class="group  relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                   >
-                    <.icon name="hero-users" class="size-5 opacity-75" />
-                  </a>
+                    <.icon name="hero-book-open" class="size-5 opacity-75" />
+                  </.link>
                 </li>
 
                 <li>
-                  <a
-                    href="#"
-                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-                  >
-                    <.icon name="hero-folder" class="size-5 opacity-75" />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#"
-                    class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
-                  >
-                    <.icon name="hero-document-text" class="size-5 opacity-75" />
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#"
+                  <.link
+                    navigate={~p"/profile"}
                     class="group relative flex justify-center rounded-sm px-2 py-1.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                   >
                     <.icon name="hero-user-circle" class="size-5 opacity-75" />
-                  </a>
+                  </.link>
                 </li>
               </ul>
             </div>

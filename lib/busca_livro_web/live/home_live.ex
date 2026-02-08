@@ -5,7 +5,8 @@ defmodule BuscaLivroWeb.HomeLive do
   on_mount {BuscaLivroWeb.LiveUserAuth, :live_user_optional}
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, book_count} = BuscaLivro.Founds.count_books()
+    {:ok, assign(socket, book_count: book_count)}
   end
 
   def handle_params(params, _url, socket) do
@@ -52,7 +53,7 @@ defmodule BuscaLivroWeb.HomeLive do
               </div>
             </.form>
           </div>
-
+          <div class="badge badge-primary">{@book_count}</div>
           <.async_result :let={books} assign={@books}>
             <:loading>
               <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -125,10 +126,12 @@ defmodule BuscaLivroWeb.HomeLive do
         </p>
       </div>
       <figure>
-        <img
-          src={@book_found.book.image_url}
-          alt="Shoes"
-        />
+        <a href={@book_found.book.url}>
+          <img
+            src={@book_found.book.image_url}
+            alt="Shoes"
+          />
+        </a>
       </figure>
     </div>
     """
@@ -147,10 +150,12 @@ defmodule BuscaLivroWeb.HomeLive do
         </p>
       </div>
       <figure>
-        <img
-          src={@book.image_url}
-          alt="Shoes"
-        />
+        <a href={@book.url}>
+          <img
+            src={@book.image_url}
+            alt="Shoes"
+          />
+        </a>
       </figure>
     </div>
     """

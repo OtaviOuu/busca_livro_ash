@@ -12,6 +12,7 @@ defmodule BuscaLivro.Founds do
       define :create_book, action: :create
       define :list_books, action: :read
       define :search_books, action: :search, args: [:book_name]
+      define :count_books, action: :count
     end
 
     resource BuscaLivro.Founds.Plataform
