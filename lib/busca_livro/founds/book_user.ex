@@ -29,6 +29,10 @@ defmodule BuscaLivro.Founds.BookUser do
     policy action_type(:read) do
       authorize_if actor_present()
     end
+
+    policy action_type(:destroy) do
+      authorize_if relates_to_actor_via(:user_id)
+    end
   end
 
   relationships do

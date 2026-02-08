@@ -13,6 +13,7 @@ defmodule BuscaLivro.Founds do
       define :list_books, action: :read
       define :get_book, action: :read, get_by: :id
       define :search_books, action: :search, args: [:book_name]
+
       define :count_books, action: :count
     end
 
@@ -20,6 +21,8 @@ defmodule BuscaLivro.Founds do
 
     resource BuscaLivro.Founds.BookUser do
       define :list_achados, action: :read
+      define :delete_found_book, action: :destroy
+      define :get_found_book, action: :read, get_by: :user_id
       define :associate_wanted_book_to_user, action: :create, args: [:book_id, :user_id]
     end
   end
