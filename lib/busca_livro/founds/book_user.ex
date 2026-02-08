@@ -35,6 +35,10 @@ defmodule BuscaLivro.Founds.BookUser do
     end
   end
 
+  attributes do
+    uuid_v7_primary_key :id
+  end
+
   relationships do
     belongs_to :book, BuscaLivro.Founds.Book do
       source_attribute :book_id
