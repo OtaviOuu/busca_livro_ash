@@ -1,7 +1,7 @@
 defmodule BuscaLivroWeb.PageController do
   use BuscaLivroWeb, :controller
 
-  def home(conn, _params) do
-    render(conn, :home)
+  def redirec(conn, _params) do
+    redirect(conn, to: "/home")
   end
 end
