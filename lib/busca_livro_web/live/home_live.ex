@@ -150,12 +150,12 @@ defmodule BuscaLivroWeb.HomeLive do
         </p>
       </div>
       <figure>
-        <a href={@book.url}>
+        <.link navigate={~p"/books/#{@book.id}"}>
           <img
             src={@book.image_url}
-            alt="Shoes"
+            alt="book cover image"
           />
-        </a>
+        </.link>
       </figure>
     </div>
     """
