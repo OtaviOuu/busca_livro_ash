@@ -42,4 +42,8 @@ defmodule BuscaLivro.Founds.BookUser do
       destination_attribute :id
     end
   end
+
+  identities do
+    identity :unique_found_book, [:book_id, :user_id]
+  end
 end

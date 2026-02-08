@@ -24,13 +24,17 @@ defmodule BuscaLivro.Founds.Book do
       primary? true
 
       change after_action(fn changeset, book, _ctx ->
+               IO.inspect("side effect: associar livro a usuários que querem palavras do título")
                book = Ash.load!(book, :title_words)
                # mmelhor fazer um query e botar o filtro na db, talvez
                users = BuscaLivro.Accounts.list_users!(authorize?: false)
 
                Enum.each(users, fn user ->
                  if Enum.any?(user.wanted_words, &(&1 in book.title_words)) do
-                   BuscaLivro.Founds.associate_wanted_book_to_user!(book.id, user.id,
+                   BuscaLivro.Founds.associate_wanted_book_to_user(book.id, user.id,
+                     upsert?: true,
+                     upsert_identity: :unique_found_book,
+                     upsert_fields: [:book_id, :user_id],
                      authorize?: false
                    )
                  end
