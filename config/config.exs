@@ -15,7 +15,12 @@ config :busca_livro, Oban,
   queues: [default: 10],
   repo: BuscaLivro.Repo,
   plugins: [
-    {Oban.Plugins.Cron, []}
+    {Oban.Plugins.Cron,
+     [
+       crontab: [
+         {"*/10 * * * *", BuscaLivro.Scraper.Worker}
+       ]
+     ]}
   ]
 
 config :ex_cldr, default_backend: BuscaLivro.Cldr
