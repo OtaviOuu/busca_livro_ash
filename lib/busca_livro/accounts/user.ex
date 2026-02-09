@@ -66,6 +66,7 @@ defmodule BuscaLivro.Accounts.User do
   actions do
     read :read do
       primary? true
+      prepare build(load: [:wanted_words])
     end
 
     update :add_wanted_word do
