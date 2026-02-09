@@ -42,7 +42,7 @@ defmodule BuscaLivroWeb.Router do
   scope "/", BuscaLivroWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :redirec
     live "/home", HomeLive, :index
     live "/profile", ProfileLive, :index
     live "/books/:id", BookLive, :show

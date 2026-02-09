@@ -10,32 +10,39 @@ defmodule BuscaLivro.Scraper.Actions.ScrapeEstanteVirtualBooks do
   @query_filters_for_newest_used_books "?sort=new-releases&tipo-de-livro=usado"
 
   def run(_input, _opts, _ctx) do
+    Logger.info("Starting to scrape Estante Virtual books...")
+
     books_url =
       get_categories_urls()
-      # |> Enum.take(5)
+      |> Enum.take(5)
       |> get_all_books_urls_from_categories_urls()
-      # |> Enum.take(10)
+      |> Enum.take(10)
       |> get_all_books_data_from_urls()
 
     {:ok, books_url}
   end
 
   defp get_categories_urls do
-    with {:ok, categories_html_tree} <- parse_html_from_url(@categories_url) do
-      categories_html_tree
-      |> Floki.find(".landing-page-estante")
-      |> Floki.find(".menu_lista-estantes")
-      |> Floki.find("a")
-      |> Floki.attribute("href")
-      |> Enum.map(&build_books_newst_page_url/1)
+    case parse_html_from_url(@categories_url) do
+      {:ok, categories_html_tree} ->
+        categories_html_tree
+        |> Floki.find(".landing-page-estante")
+        |> Floki.find(".menu_lista-estantes")
+        |> Floki.find("a")
+        |> Floki.attribute("href")
+        |> Enum.map(&build_books_newst_page_url/1)
+
+      {:error, _} ->
+        Logger.error("Failed to parse categories page HTML")
+        []
     end
   end
 
   defp get_all_books_urls_from_categories_urls(categories_urls) do
     categories_urls
     |> Task.async_stream(&get_book_urls_from_category/1,
-      max_concurrency: 50,
-      timeout: :infinity
+      max_concurrency: 20,
+      timeout: 40_000
     )
     |> Enum.flat_map(fn {:ok, book_urls} -> book_urls end)
   end
@@ -54,8 +61,8 @@ defmodule BuscaLivro.Scraper.Actions.ScrapeEstanteVirtualBooks do
   defp get_all_books_data_from_urls(book_urls) do
     book_urls
     |> Task.async_stream(&get_book_data_from_url/1,
-      max_concurrency: 50,
-      timeout: :infinity
+      max_concurrency: 20,
+      timeout: 40_000
     )
     |> Enum.flat_map(fn {:ok, book_data} -> [book_data] end)
   end

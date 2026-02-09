@@ -45,7 +45,7 @@ defmodule BuscaLivro.Founds.Book do
 
     read :read do
       primary? true
-
+      prepare build(load: [:title_words])
       pagination offset?: true, keyset?: true, required?: false
     end
 
@@ -54,10 +54,7 @@ defmodule BuscaLivro.Founds.Book do
         allow_nil? false
       end
 
-      filter expr(
-               ilike(title, "%" <> ^arg(:book_name) <> "%") or
-                 ilike(url, "%" <> ^arg(:book_name) <> "%")
-             )
+      filter expr(ilike(title, "%" <> ^arg(:book_name) <> "%"))
 
       pagination offset?: true, keyset?: true, required?: false
     end
