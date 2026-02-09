@@ -24,7 +24,6 @@ defmodule BuscaLivro.Founds.Book do
       primary? true
 
       change after_action(fn changeset, book, _ctx ->
-               book = Ash.load!(book, :title_words)
                # mmelhor fazer um query e botar o filtro na db, talvez
                users = BuscaLivro.Accounts.list_users!(authorize?: false)
 
