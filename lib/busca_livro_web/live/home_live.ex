@@ -26,71 +26,84 @@ defmodule BuscaLivroWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <Layouts.app {assigns}>
-      <div class="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8 px-4 py-6">
-        <div class="h-32 rounded lg:col-span-2">
-          <div class="w-full flex justify-center px-6 py-8">
-            <.form for={nil} class="w-full max-w-md" phx-change="search">
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
-                  <.icon name="hero-magnifying-glass" class="w-5 h-5 text-base-content/50" />
-                </span>
+      <div class="container mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div class="xl:col-span-2 space-y-6">
+            <div class="card bg-base-100 shadow-sm">
+              <div class="card-body">
+                <.form for={nil} class="w-full" phx-change="search">
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
+                      <.icon name="hero-magnifying-glass" class="w-5 h-5 text-base-content/50" />
+                    </span>
 
-                <input
-                  phx-debounce="100"
-                  type="search"
-                  placeholder="Buscar livros..."
-                  name="search_form[book_name]"
-                  autocomplete="off"
-                  class="
-                  w-full h-14 pl-12 pr-4
-                  input input-bordered
-                  text-base
-                  focus:outline-none focus:ring-2 focus:ring-primary/30
-                  transition-all duration-150
-                  shadow-sm
-                "
-                />
+                    <input
+                      phx-debounce="100"
+                      type="search"
+                      placeholder="Buscar livros..."
+                      name="search_form[book_name]"
+                      autocomplete="off"
+                      class="input input-bordered w-full pl-12 h-12"
+                    />
+                  </div>
+                </.form>
+
+                <div class="flex justify-end">
+                  <div class="badge badge-primary badge-lg">{@book_count}</div>
+                </div>
               </div>
-            </.form>
+            </div>
+
+            <.async_result :let={books} assign={@books}>
+              <:loading>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <.books_card_skeleton :for={_ <- 1..6} />
+                </ul>
+              </:loading>
+
+              <%= if books == [] do %>
+                <.empty_books />
+              <% else %>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <.book_card :for={book <- books} book={book} />
+                </ul>
+              <% end %>
+            </.async_result>
           </div>
-          <div class="badge badge-primary">{@book_count}</div>
-          <.async_result :let={books} assign={@books}>
-            <:loading>
-              <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <.books_card_skeleton :for={_ <- 1..6} />
+
+          <div class="space-y-6">
+            <div class="card bg-base-100 shadow-sm">
+              <div class="card-body">
+                <.header>
+                  Achados
+                  <:subtitle>
+                    Seus livros encontrados
+                  </:subtitle>
+                </.header>
+
+                <div :if={@current_user} class="flex flex-wrap gap-2">
+                  <p
+                    :for={word <- @current_user.wanted_words}
+                    class="badge badge-primary badge-outline"
+                  >
+                    {word}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <.async_result :let={books_founds} :if={@current_user} assign={@books_founds}>
+              <:loading>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
+                  <.books_card_skeleton :for={_ <- 1..4} />
+                </ul>
+              </:loading>
+
+              <ul class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
+                <.found_book_card :for={book_found <- books_founds} book_found={book_found} />
               </ul>
-            </:loading>
-            <%= if books == [] do %>
-              <.empty_books />
-            <% else %>
-              <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <.book_card :for={book <- books} book={book} />
-              </ul>
-            <% end %>
-          </.async_result>
-        </div>
-        <div class="h-32 rounded ">
-          <.header>
-            Achados
-            <:subtitle>
-              Seus livros encontrados
-            </:subtitle>
-          </.header>
-          <div :if={@current_user} class="flex flex-row gap-2 mb-4">
-            <p :for={word <- @current_user.wanted_words} class="badge badge-primary badge-outline">
-              {word}
-            </p>
+            </.async_result>
           </div>
-          <.async_result :let={books_founds} :if={@current_user} assign={@books_founds}>
-            <:loading>
-              <ul class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <.books_card_skeleton :for={_ <- 1..6} />
-              </ul>
-            </:loading>
-            <ul class="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2">
-              <.found_book_card :for={book_found <- books_founds} book_found={book_found} />
-            </ul>
-          </.async_result>
         </div>
       </div>
     </Layouts.app>
@@ -99,15 +112,15 @@ defmodule BuscaLivroWeb.HomeLive do
 
   defp books_card_skeleton(assigns) do
     ~H"""
-    <div class="card cursor-pointer border border-dotted bg-base-200 w-96 shadow-xl">
-      <figure class="px-4 pt-4">
-        <div class="skeleton h-72 w-full rounded-xl"></div>
+    <div class="card bg-base-200 w-full">
+      <figure class="aspect-[3/4] p-4">
+        <div class="skeleton w-full h-full rounded-xl"></div>
       </figure>
 
-      <div class="card-body gap-4 flex-1 min-h-[250px]">
-        <div class="skeleton h-7 w-4/5"></div>
-        <div class="skeleton h-6 w-2/5"></div>
-        <div class="skeleton h-6 w-3/5"></div>
+      <div class="card-body gap-3">
+        <div class="skeleton h-5 w-4/5"></div>
+        <div class="skeleton h-4 w-2/5"></div>
+        <div class="skeleton h-4 w-3/5"></div>
       </div>
     </div>
     """
@@ -115,99 +128,78 @@ defmodule BuscaLivroWeb.HomeLive do
 
   defp found_book_card(assigns) do
     ~H"""
-    <div class="card cursor-pointer border border-dotted bg-base-200 w-vh shadow-xl hover:shadow-2xl transition-shadow duration-300">
-      <div class="card-body">
-        <h2 class="card-title">{@book_found.book.title}</h2>
-        <p>
-          {@book_found.book.price}
-        </p>
-        <p>
-          {@book_found.book.inserted_at}
-        </p>
-      </div>
-      <figure>
-        <a href={@book_found.book.url}>
+    <div class="card bg-base-200 shadow hover:shadow-xl transition w-full">
+      <figure class="aspect-[4/3] overflow-hidden">
+        <a href={@book_found.book.url} class="w-full h-full">
           <img
             src={@book_found.book.image_url}
-            alt="Shoes"
+            class="w-full h-full object-cover"
           />
         </a>
       </figure>
+
+      <div class="card-body p-4">
+        <h2 class="card-title text-base line-clamp-2">
+          {@book_found.book.title}
+        </h2>
+        <p class="text-sm opacity-70">{@book_found.book.price}</p>
+        <p class="text-xs opacity-50">{@book_found.book.inserted_at}</p>
+      </div>
     </div>
     """
   end
 
   defp book_card(assigns) do
     ~H"""
-    <div class="card cursor-pointer border border-dotted bg-base-200 w-96 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-      <div class="card-body">
-        <h2 class="card-title">{@book.title}</h2>
-        <p>
-          {@book.price}
-        </p>
-        <p>
-          {@book.inserted_at}
-        </p>
-      </div>
-      <figure>
-        <.link navigate={~p"/books/#{@book.id}"}>
+    <div class="card bg-base-200 shadow hover:shadow-xl transition w-full h-full">
+      <figure class="aspect-[3/4] overflow-hidden">
+        <.link navigate={~p"/books/#{@book.id}"} class="w-full h-full">
           <img
             src={@book.image_url}
-            alt="book cover image"
+            alt="book cover"
+            class="w-full h-full object-cover"
           />
         </.link>
       </figure>
+
+      <div class="card-body p-4">
+        <h2 class="card-title text-base line-clamp-2">{@book.title}</h2>
+        <p class="text-sm opacity-70">{@book.price}</p>
+        <p class="text-xs opacity-50">{@book.inserted_at}</p>
+      </div>
     </div>
     """
   end
 
   defp empty_books(assigns) do
     ~H"""
-    <div class="max-w-md text-center card mx-auto my-16">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="mx-auto size-20 text-gray-400"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"
+    <div class="card bg-base-100 shadow max-w-lg mx-auto">
+      <div class="card-body text-center space-y-4">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mx-auto w-16 h-16 opacity-40"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-        </path>
-      </svg>
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
 
-      <h2 class="mt-6 text-2xl font-bold text-gray-900">Hmm, nothing found</h2>
+        <h2 class="text-xl font-bold">Nenhum livro encontrado</h2>
+        <p class="text-sm opacity-70">
+          Tente outro termo de busca ou explore novas categorias.
+        </p>
 
-      <p class="mt-4 text-pretty text-gray-700">
-        We couldn't find what you were looking for. Try a different search term or explore our
-        popular categories.
-      </p>
-
-      <div class="mt-6 space-y-2">
-        <.button
-          href="#"
-          class="w-full btn btn-primary"
-        >
-          Browse Popular Items
-        </.button>
-
-        <.button
-          href="#"
-          class="w-full btn btn-secundary"
-        >
-          Refine Search
-        </.button>
+        <div class="flex flex-col gap-2">
+          <.button class="btn btn-primary w-full">Explorar</.button>
+          <.button class="btn btn-outline w-full">Refinar busca</.button>
+        </div>
       </div>
-
-      <p class="mt-6 flex flex-wrap justify-center gap-8 text-sm">
-        <a href="#" class="text-indigo-600 hover:underline">Trending</a>
-        <a href="#" class="text-indigo-600 hover:underline">New</a>
-        <a href="#" class="text-indigo-600 hover:underline">Best sellers</a>
-      </p>
     </div>
     """
   end
@@ -226,7 +218,7 @@ defmodule BuscaLivroWeb.HomeLive do
       "" ->
         assign_async(socket, :books, fn ->
           books =
-            BuscaLivro.Founds.list_books!(page: [limit: 100, offset: 0])
+            BuscaLivro.Founds.list_books!(page: [limit: 20, offset: 0])
             |> Map.get(:results, [])
 
           {:ok, %{books: books}}
