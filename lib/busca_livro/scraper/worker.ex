@@ -18,7 +18,7 @@ defmodule BuscaLivro.Scraper.Worker do
           upsert?: true,
           upsert_identity: :unique_url,
           upsert_fields: [:title, :authors, :price, :cover_url],
-          return_records?: true
+          return_records?: false
         )
 
         :ok

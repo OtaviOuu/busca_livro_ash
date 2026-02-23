@@ -2,7 +2,12 @@ defmodule BuscaLivro.Founds.Book do
   use Ash.Resource,
     otp_app: :busca_livro,
     domain: BuscaLivro.Founds,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
+
+  json_api do
+    type "book"
+  end
 
   postgres do
     table "books"
@@ -48,21 +53,25 @@ defmodule BuscaLivro.Founds.Book do
 
     attribute :title, :string do
       allow_nil? false
+      public? true
     end
 
     attribute :price, :money do
       allow_nil? false
+      public? true
     end
 
     attribute :image_url, :string do
       allow_nil? false
+      public? true
     end
 
     attribute :url, :string do
       allow_nil? false
+      public? true
     end
 
-    timestamps()
+    timestamps(public?: true)
   end
 
   relationships do
@@ -76,7 +85,8 @@ defmodule BuscaLivro.Founds.Book do
   calculations do
     calculate :title_words,
               {:array, :string},
-              expr(fragment("regexp_split_to_array(lower(?), '\\s+')", title))
+              expr(fragment("regexp_split_to_array(lower(?), '\\s+')", title)),
+              public?: true
   end
 
   identities do

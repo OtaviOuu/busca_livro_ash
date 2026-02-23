@@ -41,6 +41,8 @@ defmodule BuscaLivro.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:open_api_spex, "~> 3.0"},
+      {:ash_json_api, "~> 1.0"},
       {:oban, "~> 2.0"},
       {:ash_oban, "~> 0.7"},
       {:ex_money_sql, "~> 1.0"},

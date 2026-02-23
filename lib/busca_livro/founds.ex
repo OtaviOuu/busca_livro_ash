@@ -1,7 +1,15 @@
 defmodule BuscaLivro.Founds do
   use Ash.Domain,
     otp_app: :busca_livro,
-    extensions: [AshAdmin.Domain, AshPhoenix]
+    extensions: [AshJsonApi.Domain, AshAdmin.Domain, AshPhoenix]
+
+  json_api do
+    routes do
+      base_route "/books", BuscaLivro.Founds.Book do
+        index :read
+      end
+    end
+  end
 
   admin do
     show? true
