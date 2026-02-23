@@ -4,7 +4,7 @@ defmodule BuscaLivro.Founds.BookUser do
     domain: BuscaLivro.Founds,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [AshAuthentication, AshJsonApi.Resource]
 
   postgres do
     table "book_users"

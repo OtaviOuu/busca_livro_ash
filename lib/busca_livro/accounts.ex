@@ -1,5 +1,29 @@
 defmodule BuscaLivro.Accounts do
-  use Ash.Domain, otp_app: :busca_livro, extensions: [AshAdmin.Domain, AshPhoenix]
+  use Ash.Domain,
+    otp_app: :busca_livro,
+    extensions: [AshJsonApi.Domain, AshAdmin.Domain, AshPhoenix]
+
+  json_api do
+    routes do
+      base_route "/users", BuscaLivro.Accounts.User do
+        post :register_with_password do
+          route "/register"
+
+          metadata fn _subject, user, _request ->
+            %{token: user.__metadata__.token}
+          end
+        end
+
+        post :sign_in_with_password do
+          route "/sign-in"
+
+          metadata fn _subject, user, _request ->
+            %{token: user.__metadata__.token}
+          end
+        end
+      end
+    end
+  end
 
   admin do
     show? true

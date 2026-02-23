@@ -6,7 +6,11 @@ defmodule BuscaLivro.Accounts.User do
     domain: BuscaLivro.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [AshJsonApi.Resource, AshAuthentication]
+
+  json_api do
+    type "user"
+  end
 
   authentication do
     add_ons do
@@ -332,12 +336,12 @@ defmodule BuscaLivro.Accounts.User do
       authorize_if always()
     end
 
-    policy action_type(:update) do
-      authorize_if expr(id == ^actor(:id))
+    policy action([:register_with_password, :sign_in_with_password, :get_by_email]) do
+      authorize_if always()
     end
 
-    policy action_type(:read) do
-      authorize_if actor_present()
+    policy action_type(:update) do
+      authorize_if expr(id == ^actor(:id))
     end
   end
 
@@ -361,7 +365,7 @@ defmodule BuscaLivro.Accounts.User do
       description "A list of words that the user wants to be notified about when they appear in book titles"
 
       allow_nil? false
-      public? true
+      public? false
     end
   end
 
