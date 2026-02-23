@@ -6,6 +6,11 @@ defmodule BuscaLivro.Founds.BookUser do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication, AshJsonApi.Resource]
 
+  json_api do
+    type "book_user"
+    includes [:book]
+  end
+
   postgres do
     table "book_users"
     repo BuscaLivro.Repo
@@ -43,6 +48,7 @@ defmodule BuscaLivro.Founds.BookUser do
     belongs_to :book, BuscaLivro.Founds.Book do
       source_attribute :book_id
       destination_attribute :id
+      public? true
     end
 
     belongs_to :user, BuscaLivro.Accounts.User do
