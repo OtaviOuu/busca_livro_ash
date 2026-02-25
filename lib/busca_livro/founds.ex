@@ -7,6 +7,7 @@ defmodule BuscaLivro.Founds do
     routes do
       base_route "/books", BuscaLivro.Founds.Book do
         index :read
+        get :read
       end
 
       base_route "/achados", BuscaLivro.Founds.BookUser do
