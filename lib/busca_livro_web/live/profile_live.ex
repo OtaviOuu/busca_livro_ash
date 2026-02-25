@@ -110,10 +110,11 @@ defmodule BuscaLivroWeb.ProfileLive do
           socket
           |> assign(current_user: user)
           |> put_flash(:info, "Palavra removida com sucesso.")
+          |> push_navigate(to: ~p"/profile")
 
         {:noreply, socket}
 
-      {:error, _reason} ->
+      {:error, reason} ->
         socket =
           socket
           |> put_flash(:error, "Não foi possível remover a palavra. Tente novamente.")

@@ -137,7 +137,8 @@ defmodule BuscaLivro.Accounts.User do
 
       change fn changeset, _ctx ->
         word_to_remove = Ash.Changeset.get_argument(changeset, :word)
-        old_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
+
+        old_words = Ash.Changeset.get_data(changeset, :wanted_words) || []
 
         newest_words = Enum.filter(old_words, fn word -> word != word_to_remove end)
 
