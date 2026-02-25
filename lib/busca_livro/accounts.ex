@@ -36,6 +36,7 @@ defmodule BuscaLivro.Accounts do
       define :add_wanted_word, action: :add_wanted_word, args: [:new_word]
       define :list_users, action: :read
       define :get_user, action: :get_by_email
+      define :remove_wanted_word, action: :remove_wanted_word, args: [:word]
     end
   end
 end

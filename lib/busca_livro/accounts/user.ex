@@ -127,6 +127,32 @@ defmodule BuscaLivro.Accounts.User do
       end
     end
 
+    update :remove_wanted_word do
+      require_atomic? false
+
+      argument :word, :string do
+        description "A word to remove from the user's wanted words list."
+        allow_nil? false
+      end
+
+      change fn changeset, _ctx ->
+        word_to_remove = Ash.Changeset.get_argument(changeset, :word)
+        old_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
+
+        newest_words = Enum.filter(old_words, fn word -> word != word_to_remove end)
+
+        if newest_words == old_words do
+          Ash.Changeset.add_error(changeset,
+            field: :word,
+            message: "word not found in wanted words list"
+          )
+        else
+          changeset
+          |> Ash.Changeset.change_attribute(:wanted_words, newest_words)
+        end
+      end
+    end
+
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
       argument :subject, :string, allow_nil?: false
