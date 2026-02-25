@@ -87,8 +87,15 @@ defmodule BuscaLivro.Accounts.User do
         old_words = Ash.Changeset.get_attribute(changeset, :wanted_words) || []
         newest_words = Enum.uniq([new_word | old_words])
 
-        changeset
-        |> Ash.Changeset.change_attribute(:wanted_words, newest_words)
+        if new_word in old_words do
+          Ash.Changeset.add_error(changeset,
+            field: :new_word,
+            message: "word already exists in wanted words list"
+          )
+        else
+          changeset
+          |> Ash.Changeset.change_attribute(:wanted_words, newest_words)
+        end
       end
 
       validate fn changeset, _context ->
