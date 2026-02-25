@@ -1,6 +1,8 @@
 defmodule BuscaLivroWeb.HomeLive do
   use BuscaLivroWeb, :live_view
 
+  import BuscaLivroWeb.Profile.BookLists
+
   on_mount {BuscaLivroWeb.LiveUserAuth, :current_user}
   on_mount {BuscaLivroWeb.LiveUserAuth, :live_user_optional}
 
@@ -64,9 +66,7 @@ defmodule BuscaLivroWeb.HomeLive do
               <%= if books == [] do %>
                 <.empty_books />
               <% else %>
-                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <.book_card :for={book <- books} book={book} />
-                </ul>
+                <.book_list books={books} />
               <% end %>
             </.async_result>
           </div>
@@ -98,10 +98,7 @@ defmodule BuscaLivroWeb.HomeLive do
                   <.books_card_skeleton :for={_ <- 1..4} />
                 </ul>
               </:loading>
-
-              <ul class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
-                <.found_book_card :for={book_found <- books_founds} book_found={book_found} />
-              </ul>
+              <.found_book_list books={books_founds} />
             </.async_result>
           </div>
         </div>
@@ -151,23 +148,6 @@ defmodule BuscaLivroWeb.HomeLive do
 
   defp book_card(assigns) do
     ~H"""
-    <div class="card bg-base-200 shadow hover:shadow-xl transition w-full h-full">
-      <figure class="aspect-[3/4] overflow-hidden">
-        <.link navigate={~p"/books/#{@book.id}"} class="w-full h-full">
-          <img
-            src={@book.image_url}
-            alt="book cover"
-            class="w-full h-full object-cover"
-          />
-        </.link>
-      </figure>
-
-      <div class="card-body p-4">
-        <h2 class="card-title text-base line-clamp-2">{@book.title}</h2>
-        <p class="text-sm opacity-70">{@book.price}</p>
-        <p class="text-xs opacity-50">{@book.inserted_at}</p>
-      </div>
-    </div>
     """
   end
 

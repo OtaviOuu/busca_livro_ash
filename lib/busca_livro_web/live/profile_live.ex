@@ -17,6 +17,10 @@ defmodule BuscaLivroWeb.ProfileLive do
   def render(assigns) do
     ~H"""
     <Layouts.app {assigns}>
+      <.header>
+        Profile
+        <:subtitle></:subtitle>
+      </.header>
       <.form for={@form_to_add_wanted_word} phx-submit="add_wanted_word" class="form-inline">
         <.input
           class="input"

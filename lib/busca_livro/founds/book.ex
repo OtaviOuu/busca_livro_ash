@@ -25,6 +25,11 @@ defmodule BuscaLivro.Founds.Book do
       end
     end
 
+    read :read_achados do
+      pagination offset?: true, keyset?: true, required?: false
+      filter expr(users.id == ^actor(:id))
+    end
+
     create :create do
       primary? true
 
